@@ -1,17 +1,37 @@
-```yaml
-    # ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# Building Pipeline (yaml) of a .Net Core Web Application with React 
 
+The following code is the yaml file of a building pipeline for a .Net core web application with React as front-end.
+
+### Triger the build pipeline
+Pipeline is triggered for all branches.
+```yaml
 trigger:
   branches:
     include:
     - '*'
+```
+### Define pool
+The pool keyword specifies which pool to use for a job of the pipeline. A pool specification also holds information 
+about the job's strategy for running. You can specify a pool at the pipeline, stage, or job level. The pool specified 
+at the lowest level of the hierarchy is used to run the job.
 
+##### Syntax:
+
+```yaml
+pool:
+  name: string  # name of the pool to run this job in
+  demands: string | [ string ]  # see the following "Demands" topic
+  vmImage: string # name of the VM image you want to use; valid only in the Microsoft-hosted pool
+```
+
+##### Example:
+
+```yaml
 pool:
   vmImage: 'ubuntu-latest'
+```
 
+```yaml
 variables:
   buildConfiguration: 'Release'
 
