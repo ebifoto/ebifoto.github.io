@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    # ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+    - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: 
+    checkLatest: true
+
+- task: NuGetCommand@2
+  displayName: 'Restore Nuget Packages'
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    projects: |
+     **/*.csproj
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    command: 'install'
+    workingDir: 'src/OrTools.PoC/OrTools.PoC.Web/ClientApp'
+
+- task: Npm@1
+  displayName: 'npm run build'
+  inputs:
+    command: 'custom'
+    workingDir: 'src/OrTools.PoC/OrTools.PoC.Web/ClientApp'
+    customCommand: 'run build'
+
+- task: Npm@1
+  displayName: 'npm test'
+  inputs:
+    command: custom
+    workingDir: 'src/OrTools.PoC/OrTools.PoC.Web/ClientApp'
+    verbose: false
+    customCommand: test
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNet Test'
+  inputs:
+    command: test
+    workingDirectory: 'src/OrTools.PoC'
+    projects: '$(Parameters.TestProjects)'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish web'
+  inputs:
+    command: 'publish'
+    workingDirectory: 'src/OrTools.PoC'
+    publishWebProjects: false
+    projects: |
+     **/OrTools.PoC.Web.csproj
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish DbUp'
+  inputs:
+    command: 'publish'
+    workingDirectory: 'src/OrTools.PoC'
+    publishWebProjects: false
+    projects: |
+     **/OrTools.PoC.Database.csproj
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  </body>
+</html>
