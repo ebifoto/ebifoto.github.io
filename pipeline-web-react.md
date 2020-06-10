@@ -40,20 +40,20 @@ steps:
   displayName: 'npm install'
   inputs:
     command: 'install'
-    workingDir: 'src/OrTools.PoC/OrTools.PoC.Web/ClientApp'
+    workingDir: '[PATH-OF-THE-APPLICATION]'
 
 - task: Npm@1
   displayName: 'npm run build'
   inputs:
     command: 'custom'
-    workingDir: 'src/OrTools.PoC/OrTools.PoC.Web/ClientApp'
+    workingDir: '[PATH-OF-THE-APPLICATION]'
     customCommand: 'run build'
 
 - task: Npm@1
   displayName: 'npm test'
   inputs:
     command: custom
-    workingDir: 'src/OrTools.PoC/OrTools.PoC.Web/ClientApp'
+    workingDir: '[PATH-OF-THE-APPLICATION]'
     verbose: false
     customCommand: test
 
@@ -61,7 +61,7 @@ steps:
   displayName: 'DotNet Test'
   inputs:
     command: test
-    workingDirectory: 'src/OrTools.PoC'
+    workingDirectory: '[PATH-OF-THE-SOLUTION]'
     projects: '$(Parameters.TestProjects)'
     arguments: '--configuration $(BuildConfiguration)'
 
@@ -69,20 +69,20 @@ steps:
   displayName: 'Publish web'
   inputs:
     command: 'publish'
-    workingDirectory: 'src/OrTools.PoC'
+    workingDirectory: '[PATH-OF-THE-SOLUTION]'
     publishWebProjects: false
     projects: |
-     **/OrTools.PoC.Web.csproj
+     **/[APPLICATION.csproj]
     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish DbUp'
   inputs:
     command: 'publish'
-    workingDirectory: 'src/OrTools.PoC'
+    workingDirectory: '[PATH-OF-THE-SOLUTION]'
     publishWebProjects: false
     projects: |
-     **/OrTools.PoC.Database.csproj
+     **/[APPLICATION.csproj]
     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
 
 - task: PublishBuildArtifacts@1
