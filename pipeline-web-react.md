@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <body>
+```yaml
     # ASP.NET Core
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
@@ -93,5 +91,4 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-  </body>
-</html>
+```
