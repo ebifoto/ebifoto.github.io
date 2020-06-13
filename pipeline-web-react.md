@@ -46,6 +46,10 @@ variables:
 
 ## Steps
 
+```yaml
+steps:
+```
+
 The following are the steps of the pipeline.
 
 1. Restore NuGet packages
@@ -58,21 +62,33 @@ The following are the steps of the pipeline.
 8. Update data migration
 9. Publish artifact
 
+### Restore NuGet packages
+
+There are two ways of restoring Nuget packages, either by using NuGet Command or using DotNet command. There is one saying that NuGet command shouldn't be used in .Net Core pipelines, because DotNet Build will impicitly run restore. However, in one of my other project I encountered an issue that package restore occasionally failed in DotNet Build step, so I personally prefer to have a separate step for restoring the packages with either ways.
+
+#### Example of NuGet command
+
 ```yaml
-steps:
-
-- task: NuGetToolInstaller@1
-  inputs:
-    versionSpec: 
-    checkLatest: true
-
 - task: NuGetCommand@2
   displayName: 'Restore Nuget Packages'
   inputs:
     command: 'restore'
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
+```
 
+#### Example of DotNet command
+
+```yaml
+- taks: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+```
+
+```yaml
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
