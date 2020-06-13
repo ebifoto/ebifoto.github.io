@@ -15,9 +15,7 @@ trigger:
 
 ## Define pool
 
-The pool keyword specifies which pool to use for a job of the pipeline. A pool specification also holds information
-about the job's strategy for running. You can specify a pool at the pipeline, stage, or job level. The pool specified
-at the lowest level of the hierarchy is used to run the job.
+The pool keyword specifies which pool to use for a job of the pipeline. A pool specification also holds information about the job's strategy for running. You can specify a pool at the pipeline, stage, or job level. The pool specified at the lowest level of the hierarchy is used to run the job.
 
 ### Syntax
 
@@ -37,14 +35,30 @@ pool:
 
 ## Define variables
 
-Variables give you a convenient way to get key bits of data into various parts of the pipeline. The most common use of
-variables is to define a value that you can then use in your pipeline. All variables are stored as strings and are
-mutable. The value of a variable can change from run to run or job to job of your pipeline.
+Variables give you a convenient way to get key bits of data into various parts of the pipeline. The most common use of variables is to define a value that you can then use in your pipeline. All variables are stored as strings and are mutable. The value of a variable can change from run to run or job to job of your pipeline.
+
+The following example is to define a `BuildConfiguration` variable, and set it to 'Release'.
 
 ```yaml
 variables:
   buildConfiguration: 'Release'
+```
 
+## Steps
+
+The following are the steps of the pipeline.
+
+1. Restore NuGet packages
+2. Build
+3. Install npm packages for React
+4. Build React project
+5. Run React tests
+6. Run DotNet tests
+7. Publish web
+8. Update data migration
+9. Publish artifact
+
+```yaml
 steps:
 
 - task: NuGetToolInstaller@1
