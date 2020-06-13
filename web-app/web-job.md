@@ -13,3 +13,65 @@ There are a few NuGet packages need to be installed to have the web job to work 
 3. MicroSoft.Azure.WebJobs.Logging.ApplicationInsights
 
 The third is only needed when you wish to do logging in Application Insights.
+
+### Host Builder
+
+In `Program.cs`, create a `HostBuilder`.
+
+```c#
+var builder = new HostBuilder()
+    .ConfigureHostConfiguration(configHost =>
+    {
+        // Host configuration, e.g. add environment variables, etc.
+        configHost.AddEnvironmentVariables(prefix: "ASPNETCORE_");
+    })
+    // Here is to configure the web job
+    .ConfigureWebJobs(webJobsBuilder =>
+    {
+        // Must add Azure storage core services for .Net Core 3
+        webJobsBuilder.AddAzureStorageCoreServices();
+    })
+    .ConfigureAppConfiguration((builderContext, config) =>
+    {
+        // Load appsettings.json
+        var environment = builderContext.HostingEnvironment;
+        config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        config.AddJsonFile($"appsettings.{environment.EnvironmentName}.json",
+            optional: true,
+            reloadOnChange: true);
+
+        // Configure user secret if needed
+        if (environment.IsDevelopment())
+        {
+            config.AddUserSecrets<NetSuiteClientOptions>();
+        }
+    })
+    .ConfigureLogging((builderContext, loggingBuilder) => 
+    {
+        // Configure loggings
+        var config = builderContext.Configuration.GetSection("Logging");
+        loggingBuilder.AddConfiguration(config);
+        loggingBuilder.AddApplicationInsightsWebJobs();
+        loggingBuilder.AddDebug();
+        loggingBuilder.AddConsole();
+    })
+    .ConfigureServices((builderContext, services) =>
+    {
+        // Configure services, e.g. connection string, IOptions, dependency injection, etc.
+        services.Configure<NetSuiteClientOptions>(
+            builderContext.Configuration.GetSection(nameof(NetSuiteClientOptions)));
+
+        services.AddDbContext<UserContext>(options => 
+            options.UseSqlServer(builderContext.Configuration.GetConnectionString("UserDB")));
+
+        var newEmployeeProfileSettings = builderContext.Configuration
+            .GetSection(nameof(NewEmployeeProfileSettings)).Get<NewEmployeeProfileSettings>();
+        services.AddSingleton(newEmployeeProfileSettings);
+
+        services.AddScoped<IRepository<Department>, Repository<Department>>();
+        services.AddScoped<IRepository<Vertical>, Repository<Vertical>>();
+        services.AddScoped<IRepository<Location>, Repository<Location>>();
+        services.AddScoped<INetSuiteService, NetSuiteService.NetSuiteService>();
+        services.AddScoped<INetSuitePortTypeClientWrapper, NetSuitePortTypeClientWrapper>();
+    });
+```
