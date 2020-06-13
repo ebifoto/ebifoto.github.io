@@ -144,6 +144,10 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     arguments: '--configuration $(BuildConfiguration)'
 ```
 
+### Publish web
+
+This task will publish both the web api and the React app (they're in the same project in Visual Studio).
+
 ```yaml
 - task: DotNetCoreCLI@2
   displayName: 'Publish web'
@@ -154,7 +158,11 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     projects: |
      **/[APPLICATION.csproj]
     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+```
 
+### Update data migration
+
+```yaml
 - task: DotNetCoreCLI@2
   displayName: 'Publish DbUp'
   inputs:
@@ -164,7 +172,11 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     projects: |
      **/[APPLICATION.csproj]
     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+```
 
+### Publish artifact
+
+```yaml
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
