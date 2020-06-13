@@ -43,7 +43,7 @@ var builder = new HostBuilder()
         // Configure user secret if needed
         if (environment.IsDevelopment())
         {
-            config.AddUserSecrets<NetSuiteClientOptions>();
+            config.AddUserSecrets<SecretClass>();
         }
     })
     .ConfigureLogging((builderContext, loggingBuilder) => 
@@ -58,20 +58,10 @@ var builder = new HostBuilder()
     .ConfigureServices((builderContext, services) =>
     {
         // Configure services, e.g. connection string, IOptions, dependency injection, etc.
-        services.Configure<NetSuiteClientOptions>(
-            builderContext.Configuration.GetSection(nameof(NetSuiteClientOptions)));
+        services.Configure<SecretClass>(
+            builderContext.Configuration.GetSection(nameof(SecretClass)));
 
-        services.AddDbContext<UserContext>(options => 
-            options.UseSqlServer(builderContext.Configuration.GetConnectionString("UserDB")));
-
-        var newEmployeeProfileSettings = builderContext.Configuration
-            .GetSection(nameof(NewEmployeeProfileSettings)).Get<NewEmployeeProfileSettings>();
-        services.AddSingleton(newEmployeeProfileSettings);
-
-        services.AddScoped<IRepository<Department>, Repository<Department>>();
-        services.AddScoped<IRepository<Vertical>, Repository<Vertical>>();
-        services.AddScoped<IRepository<Location>, Repository<Location>>();
-        services.AddScoped<INetSuiteService, NetSuiteService.NetSuiteService>();
-        services.AddScoped<INetSuitePortTypeClientWrapper, NetSuitePortTypeClientWrapper>();
+        services.AddDbContext<DbContext>(options =>
+            options.UseSqlServer(builderContext.Configuration.GetConnectionString("Database")));
     });
 ```
