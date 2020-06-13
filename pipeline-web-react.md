@@ -1,21 +1,25 @@
-# Building Pipeline (yaml) of a .Net Core Web Application with React 
+# Building Pipeline (yaml) of a .Net Core Web Application with React
 
 The following code is the yaml file of a building pipeline for a .Net core web application with React as front-end.
 
-### Triger the build pipeline
+## Triger the build pipeline
+
 Pipeline is triggered for all branches.
+
 ```yaml
 trigger:
   branches:
     include:
     - '*'
 ```
-### Define pool
-The pool keyword specifies which pool to use for a job of the pipeline. A pool specification also holds information 
-about the job's strategy for running. You can specify a pool at the pipeline, stage, or job level. The pool specified 
+
+## Define pool
+
+The pool keyword specifies which pool to use for a job of the pipeline. A pool specification also holds information
+about the job's strategy for running. You can specify a pool at the pipeline, stage, or job level. The pool specified
 at the lowest level of the hierarchy is used to run the job.
 
-##### Syntax:
+### Syntax
 
 ```yaml
 pool:
@@ -24,12 +28,18 @@ pool:
   vmImage: string # name of the VM image you want to use; valid only in the Microsoft-hosted pool
 ```
 
-##### Example:
+### Example
 
 ```yaml
 pool:
   vmImage: 'ubuntu-latest'
 ```
+
+## Define variables
+
+Variables give you a convenient way to get key bits of data into various parts of the pipeline. The most common use of
+variables is to define a value that you can then use in your pipeline. All variables are stored as strings and are
+mutable. The value of a variable can change from run to run or job to job of your pipeline.
 
 ```yaml
 variables:
