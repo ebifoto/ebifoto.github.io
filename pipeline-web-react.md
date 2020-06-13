@@ -53,7 +53,7 @@ steps:
 The following are the steps of the pipeline.
 
 1. Restore NuGet packages
-2. Build
+2. Build solution
 3. Install npm packages for React
 4. Build React project
 5. Run React tests
@@ -88,6 +88,8 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     feedsToUse: 'select'
 ```
 
+### Build solution
+
 ```yaml
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
@@ -95,20 +97,32 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     projects: |
      **/*.csproj
     arguments: '--configuration $(BuildConfiguration)'
+```
 
+### Install npm packages for React
+
+```yaml
 - task: Npm@1
   displayName: 'npm install'
   inputs:
     command: 'install'
     workingDir: '[PATH-OF-THE-APPLICATION]'
+```
 
+### Build React project
+
+```yaml
 - task: Npm@1
   displayName: 'npm run build'
   inputs:
     command: 'custom'
     workingDir: '[PATH-OF-THE-APPLICATION]'
     customCommand: 'run build'
+```
 
+### Run React tests
+
+```yaml
 - task: Npm@1
   displayName: 'npm test'
   inputs:
@@ -116,7 +130,11 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     workingDir: '[PATH-OF-THE-APPLICATION]'
     verbose: false
     customCommand: test
+```
 
+### Run DotNet tests
+
+```yaml
 - task: DotNetCoreCLI@2
   displayName: 'DotNet Test'
   inputs:
@@ -124,7 +142,9 @@ There are two ways of restoring Nuget packages, either by using NuGet Command or
     workingDirectory: '[PATH-OF-THE-SOLUTION]'
     projects: '$(Parameters.TestProjects)'
     arguments: '--configuration $(BuildConfiguration)'
+```
 
+```yaml
 - task: DotNetCoreCLI@2
   displayName: 'Publish web'
   inputs:
