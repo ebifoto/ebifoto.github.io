@@ -4,3 +4,5 @@
 
 [DevOps Pages](/dev-ops.md)  
 [Web Application Pages](/web-app.md)
+[Angular Pages](/angular.md)
+[IoT Pages](/iot.md)
