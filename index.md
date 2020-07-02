@@ -2,7 +2,7 @@
 
 ## Pages
 
-[DevOps Pages](/dev-ops.md)  
-[Web Application Pages](/web-app.md)  
-[Angular Pages](/angular.md)  
-[IoT Pages](/iot.md)
+[DevOps Pages](/dev-ops.html)  
+[Web Application Pages](/web-app.html)  
+[Angular Pages](/angular.html)  
+[IoT Pages](/iot.html)
