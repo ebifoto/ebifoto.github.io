@@ -1,3 +1,3 @@
 # IoT Pages
 
-[Azure IoT](/iot/azure-iot.md)
+[Azure IoT](/iot/azure-iot.html)

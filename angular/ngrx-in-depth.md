@@ -1,3 +1,3 @@
 # NgRx in Depth
 
-[Preparation](/angular/ngrx-in-depth/preparation.md)
+[Preparation](/angular/ngrx-in-depth/preparation.html)
