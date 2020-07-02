@@ -1,4 +1,4 @@
-# My Cheat Sheets
+# My Learning Notes
 
 ## Pages
 
