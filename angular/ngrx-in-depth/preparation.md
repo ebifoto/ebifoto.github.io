@@ -47,3 +47,7 @@ NgRx stands for "Angular Reactive Extensions". It's a state management solution 
 Without the state mangement, the application will hit the backend to fetch the data needed for the view every single time. This is because the observables are tightly binded with the components. When the components are disposed and re-created, the observable instances are initialized again and again, too.
 
 By having the state management, we don't need to fetch the data that is not changed multiple times, and when the data is changed, we can immediately reflect the change on the interface without waiting for the response from the backend.
+
+## Installing NgRx and the NgRx DevTools
+
+To install NgRx, run `ng add @ngrx/store`. To install NgRx DevTools, run `ng add @ngrx/store-devtools`. To install the Redux DevTools browser extention, go to [http://extension.remotedev.io/](http://extension.remotedev.io/) for more details.
